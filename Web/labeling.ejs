@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        let uID = '<%- uName %>';
+        let unions = `<%- JSON.stringify(unions) %>`;
+        unions = JSON.parse(unions);
+        let upazillas = `<%- JSON.stringify(upazillas) %>`;
+        upazillas = JSON.parse(upazillas);
+        let districts = `<%- JSON.stringify(districts) %>`;
+        districts = JSON.parse(districts);
+        let entries = `<%- JSON.stringify(pEntries) %>`;
+        entries = JSON.parse(entries);
+
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infosarker-3 ANE-Survey-2</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+    </style>
+</head>
+<body>
+<div id="bigdiv" style="height: 100vh;margin: 0;padding: 0">
+    <div class="row" style="height: 5%">
+        <div class="col s12 l12">
+            <nav class="blue lighten-2" style="margin-bottom: 5px">
+                <div class="nav-wrapper">
+                    <a href="#" class="brand-logo"><i class="material-icons left">cloud</i>Infosarker-3 ANE-Survey-2</a>
+                    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                    <ul id="nav-mobile" class="right hide-on-med-and-down">
+                        <li><a href="\logout">LogOut<i class="material-icons right">eject</i></a></li>
+                    </ul>
+                </div>
+            </nav>
+            <ul class="sidenav" id="mobile-demo">
+                <li><a href="\logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="entries" class="container" style="height: 38%;overflow: auto;">
+        <div id="entry0" class="row" style="margin-bottom: 0px;border: 1px solid black;">
+            <div class="row" style="margin: 0px">
+                <div class="col s6" style="font-size: 30%">
+                    <div class="input-field col s4">
+                        <select id="choice10">
+                            <option value="">Choose</option>
+                            <option value="dist10">District</option>
+                            <option value="upaz10">Upazilla</option>
+                            <option value="unio10">Union</option>
+                        </select>
+                        <label>Source 1</label>
+                    </div>
+                    <div class="input-field col s8">
+                        <i class="material-icons prefix">textsms</i>
+                        <input type="text" id="sour10" class="autocomplete">
+                        <label for="sour10">Source 1</label>
+                    </div>
+                </div>
+                <div class="col s6" style="font-size: 30%">
+                    <div class="input-field col s4">
+                        <select id="choice20">
+                            <option value="">Choose</option>
+                            <option value="dist20">District</option>
+                            <option value="upaz20">Upazilla</option>
+                            <option value="unio20">Union</option>
+                        </select>
+                        <label>Source 2</label>
+                    </div>
+                    <div class="input-field col s8">
+                        <i class="material-icons prefix">textsms</i>
+                        <input type="text" id="sour20" class="autocomplete">
+                        <label for="sour20">Source 1</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin: 0px">
+                <div class="col s12" style="font-size: 30%">
+                    <div class="input-field col s2">
+                        <select id="ovun0">
+                            <option value="" disabled selected></option>
+                            <option value="OH">OH</option>
+                            <option value="UG">UG</option>
+                        </select>
+                        <label>OH/UN</label>
+                    </div>
+                    <div class="input-field col s2">
+                        <select id="nttn0">
+                            <option value="" disabled selected></option>
+                            <option value="FHL">FHL</option>
+                            <option value="SCL">SCL</option>
+                        </select>
+                        <label>NTTN</label>
+                    </div>
+                    <div class="input-field col s2">
+                        <input placeholder="Length" id="leng0" type="number" class="validate">
+                        <label>Length</label>
+                    </div>
+                    <div class="input-field col s2">
+                        <label>
+                            <input type="checkbox" id="pat0"/>
+                            <span>PAT</span>
+                        </label>
+                    </div>
+                    <div class="input-field col s2">
+                        <label>
+                            <input type="checkbox" id="fat0"/>
+                            <span>FAT</span>
+                        </label>
+                    </div>
+                    <div class="input-field col s2">
+                        <label style="vertical-align: middle">
+                            <input type="checkbox" id="fib0"/>
+                            <span>NTTN Owned Fiber</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="height: 5%">
+        <div class="row" style="margin-top: 0px;margin-bottom: 0px;">
+            <div class="col s6">
+                <button type="button" class="btn waves-effect waves-light purple darken-1 col s12" onclick="addEntry()"
+                        value="submit" style="transform: scale(0.8)">Add Entry<i class="material-icons right">send</i></button>
+            </div>
+            <div class="col s6">
+                <button type="button" class="btn waves-effect waves-light green darken-1 col s12"
+                        onclick="submitLabel()"
+                        value="submit" style="transform: scale(0.8)">Submit<i class="material-icons right">send</i></button>
+            </div>
+        </div>
+    </div>
+    <div id="entriesStats" class="container" style="margin-top: 0px;height: 50%;border: 1px solid darkgreen;overflow: auto;">
+        <form action="/labeling" method="post" id="finalSub">
+            <input id="obje" type="text" name="retObject" style="display: none">
+        </form>
+    </div>
+</div>
+<script>
+    let entCount = 0;
+    let curEntry = 0;
+    let editStats = 0;
+    let entIDs = []
+    $(document).ready(function () {
+        $('.sidenav').sidenav();
+    });
+    $(document).ready(function () {
+        $('select').formSelect();
+    });
+
+    for(let i=0; i<entries.length; i++){
+        entIDs.push(i);
+        let htm2 = `<div class="col s12" id="border${i}">
+                <span id="source1${i}" class="col s2" style="border: 1px solid darkblue">${entries[i]['source1']}</span>
+                <span id="source2${i}" class="col s2" style="border: 1px solid darkblue">${entries[i]['source2']}</span>
+                <span id="lengS${i}" class="col s1" style="border: 1px solid darkblue">${entries[i]['leng']}</span>
+                <span id="ovunS${i}" class="col s1" style="border: 1px solid darkblue">${entries[i]['ovun']}</span>
+                <span id="nttnS${i}" class="col s1" style="border: 1px solid darkblue">${entries[i]['nttn']}</span>
+                <span id="patS${i}" class="col s1" style="border: 1px solid darkblue">${entries[i]['pat']}</span>
+                <span id="fatS${i}" class="col s1" style="border: 1px solid darkblue">${entries[i]['fat']}</span>
+                <span id="fibS${i}" class="col s1" style="border: 1px solid darkblue">${entries[i]['fib']}</span>
+                <button type="button" id="edit${i}" class="btn waves-effect waves-light blue col s1" onclick="editEntry(${i})"
+                        value="submit" style="transform: scale(0.7)">Edit<i class="material-icons right">send</i></button>
+                <button type="button" class="btn waves-effect waves-light purple darken-1 col s1" onclick="removeEntry(${i})"
+                        value="submit" style="transform: scale(0.7)">Delete<i class="material-icons right">send</i></button>
+            </div>`;
+        addElement('entriesStats', 'div', `entryS${i}`, htm2);
+    }
+    entCount = entries.length;
+    curEntry = entCount;
+    entIDs.push(entCount);
+    entries.push(new Object());
+    entries[entCount]['source1'] = '';
+    entries[entCount]['source2'] = '';
+    entries[entCount]['leng'] = 0.0;
+    entries[entCount]['pat'] = 'N';
+    entries[entCount]['fat'] = 'N';
+    entries[entCount]['fib'] = 'N';
+    entries[entCount]['deleted'] = 'N';
+    let htm2 = `<div class="col s12" id="border${entCount}">
+                <span id="source1${entCount}" class="col s2" style="border: 1px solid darkred"></span>
+                <span id="source2${entCount}" class="col s2" style="border: 1px solid darkred"></span>
+                <span id="lengS${entCount}" class="col s1" style="border: 1px solid darkred"></span>
+                <span id="ovunS${entCount}" class="col s1" style="border: 1px solid darkred"></span>
+                <span id="nttnS${entCount}" class="col s1" style="border: 1px solid darkred"></span>
+                <span id="patS${entCount}" class="col s1" style="border: 1px solid darkred">N</span>
+                <span id="fatS${entCount}" class="col s1" style="border: 1px solid darkred">N</span>
+                <span id="fibS${entCount}" class="col s1" style="border: 1px solid darkred">N</span>
+                <button type="button" id="edit${entCount}" class="btn waves-effect waves-light blue col s1" onclick="editEntry(${entCount})"
+                        value="submit" style="transform: scale(0.7)">Edit<i class="material-icons right">send</i></button>
+                <button type="button" class="btn waves-effect waves-light purple darken-1 col s1" onclick="removeEntry(${entCount})"
+                        value="submit" style="transform: scale(0.7)">Delete<i class="material-icons right">send</i></button>
+            </div>`;
+    addElement('entriesStats', 'div', `entryS${entCount}`, htm2);
+    document.getElementById(`border${curEntry}`).style.border = '2px solid green';
+
+    $('#choice10').change(function () {
+        let tmp = $(this).val();
+        $('#sour10').val('');
+        $(`#source1${curEntry}`).text('');
+        if (tmp.includes('unio')) {
+            $('#sour10').autocomplete({
+                data: unions,
+            });
+        } else if (tmp.includes('upaz')) {
+            $('#sour10').autocomplete({
+                data: upazillas,
+            });
+        } else if (tmp.includes('dist')) {
+            $('#sour10').autocomplete({
+                data: districts,
+            });
+        }
+    });
+    $('#choice20').change(function () {
+        let tmp = $(this).val();
+        $('#sour20').val('');
+        $(`#source2${curEntry}`).text('');
+        if (tmp.includes('unio')) {
+            $('#sour20').autocomplete({
+                data: unions,
+            });
+        } else if (tmp.includes('upaz')) {
+            $('#sour20').autocomplete({
+                data: upazillas,
+            });
+        } else if (tmp.includes('dist')) {
+            $('#sour20').autocomplete({
+                data: districts,
+            });
+        }
+    })
+
+    $('#sour10').change(function () {
+        $(`#source1${curEntry}`).text($(this).val());
+        entries[curEntry]['source1'] = $(this).val();
+    })
+    $('#sour20').change(function () {
+        $(`#source2${curEntry}`).text($(this).val());
+        entries[curEntry]['source2'] = $(this).val();
+    })
+    $('#ovun0').change(function () {
+        $(`#ovunS${curEntry}`).text($(this).val());
+        entries[curEntry]['ovun'] = $(this).val();
+    })
+    $('#nttn0').change(function () {
+        $(`#nttnS${curEntry}`).text($(this).val());
+        entries[curEntry]['nttn'] = $(this).val();
+    })
+    $('#leng0').on('input',function () {
+        $(`#lengS${curEntry}`).text($(this).val());
+        entries[curEntry]['leng'] = $(this).val();
+    })
+    $('#pat0').change(function () {
+        if ($(this).is(":checked")) {
+            $(`#patS${curEntry}`).text('Y');
+            entries[curEntry]['pat'] = 'Y';
+        } else {
+            $(`#patS${curEntry}`).text('N');
+            entries[curEntry]['pat'] = 'N';
+        }
+    })
+    $('#fat0').change(function () {
+        if ($(this).is(":checked")) {
+            $(`#fatS${curEntry}`).text('Y');
+            entries[curEntry]['fat'] = 'Y';
+        } else {
+            $(`#fatS${curEntry}`).text('N');
+            entries[curEntry]['fat'] = 'N';
+        }
+    })
+    $('#fib0').change(function () {
+        if ($(this).is(":checked")) {
+            $(`#fibS${curEntry}`).text('Y');
+            entries[curEntry]['fib'] = 'Y';
+        } else {
+            $(`#fibS${curEntry}`).text('N');
+            entries[curEntry]['fib'] = 'N';
+        }
+    })
+
+    function setInput(elemID) {
+        let source1 = $(`#source1${curEntry}`).text();
+        if(source1 in districts)
+            $('#choice10').val('dist10');
+        else if(source1 in upazillas)
+            $('#choice10').val('upaz10');
+        else if(source1 in unions)
+            $('#choice10').val('unio10');
+        else
+            $('#choice10').val('');
+        $('#sour10').val(source1);
+
+        source1 = $(`#source2${curEntry}`).text();
+        if(source1 in districts)
+            $('#choice20').val('dist20');
+        else if(source1 in upazillas)
+            $('#choice20').val('upaz20');
+        else if(source1 in unions)
+            $('#choice20').val('unio20');
+        else
+            $('#choice20').prop('selectedIndex', 0);
+        $('#sour20').val(source1);
+
+        $('#ovun0').val($(`#ovunS${elemID}`).text());
+        $('#nttn0').val($(`#nttnS${elemID}`).text());
+
+        $(document).ready(function () {
+            $('select').formSelect();
+        });
+
+        $('#leng0').val($(`#lengS${elemID}`).text());
+        source1 = $(`#patS${elemID}`).text();
+        if(source1 == 'Y')
+            $(`#pat0`).prop('checked', true);
+        else
+            $(`#pat0`).prop('checked', false);
+        source1 = $(`#fatS${elemID}`).text();
+        if(source1 == 'Y')
+            $(`#fat0`).prop('checked', true);
+        else
+            $(`#fat0`).prop('checked', false);
+        source1 = $(`#fibS${elemID}`).text();
+        if(source1 == 'Y')
+            $(`#fib0`).prop('checked', true);
+        else
+            $(`#fib0`).prop('checked', false);
+    }
+
+    function resetInput() {
+        $('#choice10').val('');
+        $('#sour10').val('');
+        $('#choice20').val('');
+        $('#sour20').val('');
+        $('#ovun0').val('');
+        $('#nttn0').val('');
+
+        $(document).ready(function () {
+            $('select').formSelect();
+        });
+
+        $('#leng0').val('');
+        $(`#pat0`).prop('checked', false);
+        $(`#fat0`).prop('checked', false);
+        $(`#fib0`).prop('checked', false);
+    }
+
+    function editEntry(elemID) {
+        let element = document.querySelector(`#edit${elemID}`);
+        if(element.classList.contains('blue')){
+            if(editStats === 1)
+                alert('Finish current edit First!!!');
+            else{
+                editStats = 1;
+                document.getElementById(`border${curEntry}`).style.border = 'none';
+                curEntry = elemID;
+                element.classList.remove('blue');
+                element.classList.add('green');
+                document.getElementById(`border${curEntry}`).style.border = '2px solid green';
+            }
+        }
+        else if(element.classList.contains('green')){
+            editStats = 0;
+            document.getElementById(`border${curEntry}`).style.border = 'none';
+            curEntry = entIDs[entIDs.length-1];
+            element.classList.remove('green');
+            element.classList.add('blue');
+            document.getElementById(`border${curEntry}`).style.border = '2px solid green';
+        }
+        setInput(curEntry);
+    }
+
+    function submitLabel() {
+        var tmp1 = {};
+        tmp1.uID = uID;
+        tmp1.entries = entries;
+        document.querySelector('#obje').value = JSON.stringify(tmp1);
+        document.querySelector('#finalSub').submit();
+    }
+
+    function removeEntry(elemID) {
+        let element = document.getElementById(`entryS${elemID}`);
+        element.parentNode.removeChild(element);
+        entries[elemID]['deleted'] = 'Y';
+        let index = entIDs.indexOf(elemID);
+        let last = entIDs[entIDs.length-1];
+        if (index !== -1)
+            entIDs.splice(index, 1);
+        console.log(entIDs);
+        if(curEntry === last && curEntry === elemID){
+            curEntry = entIDs[entIDs.length-1];
+            setInput(curEntry);
+            if(curEntry)
+                document.getElementById(`border${curEntry}`).style.border = '2px solid green';
+            if(editStats === 1)
+                editStats = 0;
+        }
+        else if(curEntry === elemID && editStats === 1){
+            editStats = 0;
+            curEntry = entIDs[entIDs.length-1];
+            if(curEntry)
+                document.getElementById(`border${curEntry}`).style.border = '2px solid green';
+            setInput(curEntry);
+        }
+        console.log(entries);
+    }
+
+    function addEntry() {
+        if(editStats === 1){
+            alert('Finish editing first!!!');
+        }
+        else{
+            resetInput();
+            entCount++;
+            entIDs.push(entCount);
+            console.log(entIDs);
+            if(curEntry)
+                document.getElementById(`border${curEntry}`).style.border = 'none';
+            curEntry = entCount;
+            //console.log(entries);
+            entries.push(new Object());
+            entries[entCount]['source1'] = '';
+            entries[entCount]['source2'] = '';
+            entries[entCount]['leng'] = 0.0;
+            entries[entCount]['pat'] = 'N';
+            entries[entCount]['pat'] = 'N';
+            entries[entCount]['fat'] = 'N';
+            entries[entCount]['fib'] = 'N';
+            entries[entCount]['deleted'] = 'N';
+            let htm2 = `<div class="col s12" id="border${entCount}">
+                <span id="source1${entCount}" class="col s2" style="border: 1px solid darkred"></span>
+                <span id="source2${entCount}" class="col s2" style="border: 1px solid darkred"></span>
+                <span id="lengS${entCount}" class="col s1" style="border: 1px solid darkred"></span>
+                <span id="ovunS${entCount}" class="col s1" style="border: 1px solid darkred"></span>
+                <span id="nttnS${entCount}" class="col s1" style="border: 1px solid darkred"></span>
+                <span id="patS${entCount}" class="col s1" style="border: 1px solid darkred">N</span>
+                <span id="fatS${entCount}" class="col s1" style="border: 1px solid darkred">N</span>
+                <span id="fibS${entCount}" class="col s1" style="border: 1px solid darkred">N</span>
+                <button type="button" id="edit${entCount}" class="btn waves-effect waves-light blue col s1" onclick="editEntry(${entCount})"
+                        value="submit" style="transform: scale(0.7)">Edit<i class="material-icons right">send</i></button>
+                <button type="button" class="btn waves-effect waves-light purple darken-1 col s1" onclick="removeEntry(${entCount})"
+                        value="submit" style="transform: scale(0.7)">Delete<i class="material-icons right">send</i></button>
+            </div>`;
+            addElement('entriesStats', 'div', `entryS${entCount}`, htm2);
+            document.getElementById(`border${curEntry}`).style.border = '2px solid green';
+        }
+    }
+
+    function addElement(parentID, elementTag, elementID, html) {
+        var p = document.getElementById(parentID);
+        var newElement = document.createElement(elementTag);
+        newElement.setAttribute('id', elementID);
+        newElement.setAttribute('class', 'row');
+        newElement.style.border = '1px solid black';
+        newElement.style.margin = '0px';
+        newElement.innerHTML = html;
+        p.appendChild(newElement);
+    }
+</script>
+</body>
+</html>
